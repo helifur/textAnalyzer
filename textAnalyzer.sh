@@ -85,15 +85,45 @@ echo "Записываю вердикт в файл $output_file..."
 # Склонение в зависимости от количества слов
 if [ $count -le 10 ] || [ $count -ge 20 ]; then
 	if [ $((count % 10)) -eq 0 ] || [ $((count % 10)) -ge 5 ] && [ $((count % 10)) -le 9 ]; then
-		echo "Параметр \"$search_word\" встретился $count раз." >$output_file
+		result="Параметр \"$search_word\" встретился $count раз."
 	elif [ $((count % 10)) -eq 1 ]; then
-		echo "Параметр \"$search_word\" встретился $count раз." >$output_file
+		result="Параметр \"$search_word\" встретился $count раз."
 	else
-		echo "Параметр \"$search_word\" встретился $count раза." >$output_file
+		result="Параметр \"$search_word\" встретился $count раза."
 	fi
 else
-	echo "Параметр \"$search_word\" встретился $count раз." >$output_file
+	result="Параметр \"$search_word\" встретился $count раз."
 fi
+
+echo -e
+
+while true; do
+	echo "1 - Перезаписать файл вывода"
+	echo "2 - Записать результат в конец файла вывода"
+	echo "0 - Отмена"
+
+	read -p "Выберите действие (цифру необходимого варианта ответа): " choice
+	echo -e
+
+	case "$choice" in
+	1)
+		echo $result >$output_file
+		break
+		;;
+	2)
+		echo $result >>$output_file
+		break
+		;;
+	0)
+		echo "До новых встреч!"
+		exit 0
+		;;
+	*)
+		echo "Некорректный ввод!"
+		echo -e
+		;;
+	esac
+done
 
 echo "Вердикт записан!"
 echo -e
